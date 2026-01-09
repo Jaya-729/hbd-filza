@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>HBD Filza Aulia Pasha</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap");
+
+      :root {
+        --pink-dark: #ff4d6d;
+        --soft-bg: #fff5f7;
+        --chocolate-dark: #2d1b14;
+        --chocolate-light: #a68966;
+        --gold: #d4af37;
+        --cherry: #d00000;
+      }
+
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Quicksand", sans-serif;
+        background: var(--soft-bg);
+        color: #590d22;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Hidden Audio */
+      #audio-container {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        left: -9999px;
+      }
+
+      .screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: 0.6s ease-in-out;
+        z-index: 10;
+        background: var(--soft-bg);
+      }
+
+      .hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.9);
+        visibility: hidden;
+      }
+
+      h1 {
+        font-family: "Pacifico", cursive;
+        text-align: center;
+        padding: 0 20px;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
+
+      /* --- LILIN ANGKA 21 --- */
+      .candle-wrapper {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        align-items: flex-end;
+        height: 150px;
+        margin-bottom: 20px;
+      }
+      .num-candle {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+      }
+      .num-candle span {
+        font-family: "Pacifico", cursive;
+        font-size: 6rem;
+        line-height: 1;
+        color: white;
+        text-shadow: 4px 4px 0px #eee, 6px 6px 15px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(to bottom, #fff, #f0f0f0);
+        -webkit-background-clip: text;
+      }
+      .flame {
+        width: 20px;
+        height: 35px;
+        background: #ffb703;
+        border-radius: 50% 50% 20% 20%;
+        position: absolute;
+        top: -20px;
+        animation: flicker 0.1s infinite;
+        box-shadow: 0 0 20px #ffb703;
+        transition: 0.3s;
+      }
+      @keyframes flicker {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      /* --- KUE COKELAT (SESUAI GAMBAR) --- */
+      #cake-area {
+        width: 220px;
+        height: 160px;
+        position: relative;
+        touch-action: none;
+        margin-bottom: 40px;
+      }
+      .cake-piece {
+        position: absolute;
+        width: 110px;
+        height: 120px;
+        background: var(--chocolate-light);
+        background-image: repeating-linear-gradient(
+          to bottom,
+          transparent,
+          transparent 8px,
+          rgba(0, 0, 0, 0.1) 8px,
+          rgba(0, 0, 0, 0.1) 12px
+        );
+        transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        bottom: 0;
+      }
+      #p1 {
+        left: 0;
+        border-radius: 50px 0 0 50px;
+      }
+      #p2 {
+        left: 110px;
+        border-radius: 0 50px 50px 0;
+      }
+
+      .cake-piece::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 25px;
+        background: var(--chocolate-dark);
+        z-index: 2;
+      }
+      #p1::before {
+        border-radius: 50px 0 0 0;
+      }
+      #p2::before {
+        border-radius: 0 50px 0 0;
+      }
+
+      .drip {
+        position: absolute;
+        width: 12px;
+        height: 40px;
+        background: var(--chocolate-dark);
+        border-radius: 0 0 20px 20px;
+        top: 20px;
+        z-index: 3;
+      }
+      .cream {
+        position: absolute;
+        width: 35px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50% 50% 0 0;
+        top: -10px;
+        left: 35px;
+        z-index: 4;
+      }
+      .cherry {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: var(--cherry);
+        border-radius: 50%;
+        top: -20px;
+        left: 43px;
+        z-index: 5;
+      }
+
+      /* --- KADO --- */
+      #gift-section {
+        width: 100%;
+        height: 200px;
+        position: relative;
+        touch-action: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .gift-box {
+        width: 150px;
+        height: 150px;
+        background: var(--pink-dark);
+        position: relative;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: 0.5s;
+      }
+      .ribbon-v {
+        position: absolute;
+        left: 42%;
+        width: 16%;
+        height: 100%;
+        background: var(--gold);
+        transition: 0.6s;
+        z-index: 2;
+      }
+      .ribbon-h {
+        position: absolute;
+        top: 42%;
+        width: 100%;
+        height: 16%;
+        background: var(--gold);
+        transition: 0.6s;
+        z-index: 2;
+      }
+
+      /* --- GALLERY --- */
+      .gallery-wrapper {
+        width: 100%;
+        overflow: hidden;
+        height: 240px;
+        margin-top: 20px;
+      }
+      .photo-track {
+        display: flex;
+        width: max-content;
+        animation: scrollGallery 30s linear infinite;
+      }
+      @keyframes scrollGallery {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      .photo-card {
+        width: 140px;
+        height: 190px;
+        background: white;
+        padding: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin: 0 10px;
+        flex-shrink: 0;
+        border-radius: 8px;
+        transform: rotate(2deg);
+      }
+      .photo-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+
+      .btn {
+        padding: 15px 40px;
+        border-radius: 50px;
+        border: none;
+        background: var(--pink-dark);
+        color: white;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      .instruction {
+        font-size: 0.85rem;
+        color: #a36a77;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+        padding: 0 20px;
+        line-height: 1.4;
+      }
+
+      #modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 100;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+      }
+      .modal-content {
+        width: 85%;
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        color: #333;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="audio-container">
+      <iframe
+        id="sc-player"
+        width="100%"
+        height="166"
+        scrolling="no"
+        frameborder="no"
+        allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/586763991&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"></iframe>
+    </div>
+
+    <!-- SCREEN 1 -->
+    <section id="s1" class="screen">
+      <h1>Happy Birthday,<br />Filza Aulia Pasha! ✨</h1>
+      <p>Ada sesuatu buat kamu...</p>
+      <button class="btn" onclick="startApp()">Buka Kejutan</button>
+    </section>
+
+    <!-- SCREEN 2: LILIN 21 -->
+    <section id="s2" class="screen hidden">
+      <h1>Make a Wish! 🕯️</h1>
+      <div class="candle-wrapper">
+        <div class="num-candle" onclick="extinguish('f1')">
+          <div id="f1" class="flame"></div>
+          <span>2</span>
+        </div>
+        <div class="num-candle" onclick="extinguish('f2')">
+          <div id="f2" class="flame"></div>
+          <span>1</span>
+        </div>
+      </div>
+      <p class="instruction">Ketuk ke-dua api lilin untuk meniupnya!</p>
+    </section>
+
+    <!-- SCREEN 3: KUE -->
+    <section id="s3" class="screen hidden">
+      <h1>Potong Kuenya 🎂</h1>
+      <div id="cake-area">
+        <div class="cake-piece" id="p1">
+          <div class="drip" style="left: 10px; height: 50px"></div>
+          <div class="drip" style="left: 50px; height: 70px"></div>
+          <div class="cream"></div>
+          <div class="cherry"></div>
+        </div>
+        <div class="cake-piece" id="p2">
+          <div class="drip" style="left: 20px; height: 60px"></div>
+          <div class="drip" style="left: 80px; height: 45px"></div>
+          <div class="cream"></div>
+          <div class="cherry"></div>
+        </div>
+      </div>
+      <p class="instruction">Usap jarimu dari atas ke bawah pada kue!</p>
+    </section>
+
+    <!-- SCREEN 4: KADO -->
+    <section id="s4" class="screen hidden">
+      <h1>Buka Kado Kamu 🎁</h1>
+      <div id="gift-section">
+        <div class="gift-box" id="gBox">
+          <div class="ribbon-v" id="rv"></div>
+          <div class="ribbon-h" id="rh"></div>
+        </div>
+      </div>
+      <p class="instruction" id="giftHint">
+        Usap ke bawah, lalu usap ke samping!
+      </p>
+    </section>
+
+    <!-- SCREEN 5: GALLERY -->
+    <section id="s5" class="screen hidden" style="justify-content: flex-start">
+      <h1 style="margin-top: 50px">Special for Filza ❤️</h1>
+      <div class="gallery-wrapper">
+        <div class="photo-track" id="photoTrack"></div>
+      </div>
+      <p style="text-align: center; padding: 20px; font-size: 0.9rem">
+        Klik foto untuk ucapan manis dariku.
+      </p>
+      <button class="btn" onclick="location.reload()">Ulangi</button>
+    </section>
+
+    <div id="modal" onclick="this.style.display='none'">
+      <div class="modal-content">
+        <img
+          id="modalImg"
+          src=""
+          style="
+            width: 100%;
+            border-radius: 12px;
+            max-height: 280px;
+            object-fit: cover;
+          " />
+        <p
+          id="modalText"
+          style="
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #444;
+            font-weight: 500;
+          "></p>
+      </div>
+    </div>
+
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    <script>
+      let currentScreen = 0;
+      const screens = ["s1", "s2", "s3", "s4", "s5"];
+      const widget = SC.Widget(document.getElementById("sc-player"));
+
+      function startApp() {
+        widget.play();
+        next();
+      }
+
+      function next() {
+        document.getElementById(screens[currentScreen]).classList.add("hidden");
+        currentScreen++;
+        document
+          .getElementById(screens[currentScreen])
+          .classList.remove("hidden");
+      }
+
+      // LILIN LOGIC
+      let extinguishedCount = 0;
+      function extinguish(id) {
+        const flame = document.getElementById(id);
+        if (flame.style.opacity !== "0") {
+          flame.style.opacity = "0";
+          extinguishedCount++;
+          if (extinguishedCount === 2) {
+            setTimeout(next, 800);
+          }
+        }
+      }
+
+      // KUE SWIPE
+      let startY = 0;
+      document
+        .getElementById("cake-area")
+        .addEventListener("touchstart", (e) => {
+          startY = e.touches[0].clientY;
+        });
+      document
+        .getElementById("cake-area")
+        .addEventListener("touchmove", (e) => {
+          let moveY = e.touches[0].clientY;
+          if (moveY - startY > 60) {
+            document.getElementById("p1").style.transform =
+              "translateX(-60px) rotate(-10deg)";
+            document.getElementById("p2").style.transform =
+              "translateX(60px) rotate(10deg)";
+            setTimeout(() => {
+              if (currentScreen == 2) next();
+            }, 1200);
+          }
+        });
+
+      // KADO SWIPE
+      let giftStep = 0;
+      let gBoxArea = document.getElementById("gift-section");
+      let gStart = { x: 0, y: 0 };
+      gBoxArea.addEventListener("touchstart", (e) => {
+        gStart.x = e.touches[0].clientX;
+        gStart.y = e.touches[0].clientY;
+      });
+      gBoxArea.addEventListener("touchmove", (e) => {
+        let diffY = e.touches[0].clientY - gStart.y;
+        let diffX = e.touches[0].clientX - gStart.x;
+        if (giftStep === 0 && diffY > 50) {
+          giftStep = 1;
+          document.getElementById("rv").style.transform = "translateY(250px)";
+          document.getElementById("rv").style.opacity = "0";
+        } else if (giftStep === 1 && Math.abs(diffX) > 50) {
+          giftStep = 2;
+          document.getElementById("rh").style.transform =
+            "translateX(" + (diffX > 0 ? "250px" : "-250px") + ")";
+          document.getElementById("rh").style.opacity = "0";
+          document.getElementById("gBox").style.opacity = "0";
+          setTimeout(() => {
+            initGallery();
+            next();
+          }, 800);
+        }
+      });
+
+      const memories = [
+        {
+          img: "img/kenangan1.jpeg",
+          msg: "Happy Birthday, Filza Aulia Pasha! Makasih udah selalu jadi penyemangat aku.",
+        },
+        {
+          img: "img/kenangan2.jpeg",
+          msg: "Gak kerasa ya udah banyak kenangan yang kita buat bareng.",
+        },
+        {
+          img: "img/kenangan3.jpeg",
+          msg: "Makasih udah lahir ke dunia ini. Kamu kado terindah buat aku.",
+        },
+        {
+          img: "img/kenangan4.jpeg",
+          msg: "Tahun ini aku harap semua impianmu tercapai satu per satu.",
+        },
+        {
+          img: "img/kenangan5.jpeg",
+          msg: "Tetap jadi Filza yang aku kenal ya, yang ceria dan baik hati.",
+        },
+        {
+          img: "img/kenangan6.jpeg",
+          msg: "Lagu Mawar Jingga ini emang paling pas buat kita.",
+        },
+        {
+          img: "img/kenangan7.jpg",
+          msg: "Maaf kalau aku sering bikin kesel, makasih udah sabar nemenin aku.",
+        },
+        {
+          img: "img/kenangan8.jpg",
+          msg: "Dunia jadi lebih indah sejak ada kamu. Selamat bertambah usia, Sayang.",
+        },
+        {
+          img: "img/kenangan9.jpg",
+          msg: "Yuk, buat lebih banyak kenangan manis lagi di tahun ini!",
+        },
+        {
+          img: "img/kenangan10.jpeg",
+          msg: "I love you more than words can say. Selamat ulang tahun, Filza! ❤️",
+        },
+      ];
+
+      function initGallery() {
+        const track = document.getElementById("photoTrack");
+        track.innerHTML = "";
+        [...memories, ...memories].forEach((m) => {
+          const card = document.createElement("div");
+          card.className = "photo-card";
+          card.innerHTML = `<img src="${m.img}">`;
+          card.onclick = () => {
+            document.getElementById("modalImg").src = m.img;
+            document.getElementById("modalText").innerText = m.msg;
+            document.getElementById("modal").style.display = "flex";
+          };
+          track.appendChild(card);
+        });
+      }
+    </script>
+  </body>
+</html>
