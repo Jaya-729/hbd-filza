@@ -31,6 +31,23 @@
         -webkit-tap-highlight-color: transparent;
       }
 
+      /* Layar Pengunci (Countdown) */
+      #lock-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--pink-dark);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        text-align: center;
+      }
+
       /* Hidden Audio */
       #audio-container {
         position: absolute;
@@ -92,8 +109,6 @@
         line-height: 1;
         color: white;
         text-shadow: 4px 4px 0px #eee, 6px 6px 15px rgba(0, 0, 0, 0.1);
-        background: linear-gradient(to bottom, #fff, #f0f0f0);
-        -webkit-background-clip: text;
       }
       .flame {
         width: 20px;
@@ -115,7 +130,7 @@
         }
       }
 
-      /* --- KUE COKELAT (SESUAI GAMBAR) --- */
+      /* --- KUE COKELAT --- */
       #cake-area {
         width: 220px;
         height: 160px;
@@ -146,7 +161,6 @@
         left: 110px;
         border-radius: 0 50px 50px 0;
       }
-
       .cake-piece::before {
         content: "";
         position: absolute;
@@ -162,7 +176,6 @@
       #p2::before {
         border-radius: 0 50px 0 0;
       }
-
       .drip {
         position: absolute;
         width: 12px;
@@ -295,7 +308,7 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.9);
-        z-index: 100;
+        z-index: 1100;
         display: none;
         flex-direction: column;
         justify-content: center;
@@ -312,7 +325,16 @@
       }
     </style>
   </head>
-  <body>
+  <body onload="checkTime()">
+    <!-- Pengunci Tanggal -->
+    <div id="lock-screen">
+      <h1 style="color: white">Sabar Ya, Filza...</h1>
+      <p>Website ini baru bisa dibuka pas hari ulang tahunmu!</p>
+      <div
+        id="countdown"
+        style="font-size: 1.5rem; font-weight: bold; margin-top: 20px"></div>
+    </div>
+
     <div id="audio-container">
       <iframe
         id="sc-player"
@@ -324,74 +346,82 @@
         src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/586763991&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"></iframe>
     </div>
 
-    <!-- SCREEN 1 -->
-    <section id="s1" class="screen">
-      <h1>Happy Birthday,<br />Filza Aulia Pasha! ✨</h1>
-      <p>Ada sesuatu buat kamu...</p>
-      <button class="btn" onclick="startApp()">Buka Kejutan</button>
-    </section>
+    <!-- MAIN APP (Hanya tampil jika sudah tgl 10) -->
+    <div id="app" style="display: none">
+      <!-- SCREEN 1 -->
+      <section id="s1" class="screen">
+        <h1>Happy Birthday,<br />Filza Aulia Pasha! ✨</h1>
+        <p>Ada kejutan spesial buat kamu...</p>
+        <button class="btn" onclick="startApp()">Buka Kejutan</button>
+      </section>
 
-    <!-- SCREEN 2: LILIN 21 -->
-    <section id="s2" class="screen hidden">
-      <h1>Make a Wish! 🕯️</h1>
-      <div class="candle-wrapper">
-        <div class="num-candle" onclick="extinguish('f1')">
-          <div id="f1" class="flame"></div>
-          <span>2</span>
+      <!-- SCREEN 2: LILIN 21 -->
+      <section id="s2" class="screen hidden">
+        <h1>Make a Wish! 🕯️</h1>
+        <div class="candle-wrapper">
+          <div class="num-candle" onclick="extinguish('f1')">
+            <div id="f1" class="flame"></div>
+            <span>2</span>
+          </div>
+          <div class="num-candle" onclick="extinguish('f2')">
+            <div id="f2" class="flame"></div>
+            <span>1</span>
+          </div>
         </div>
-        <div class="num-candle" onclick="extinguish('f2')">
-          <div id="f2" class="flame"></div>
-          <span>1</span>
-        </div>
-      </div>
-      <p class="instruction">Ketuk ke-dua api lilin untuk meniupnya!</p>
-    </section>
+        <p class="instruction">Ketuk ke-dua api lilin angka 21-mu!</p>
+      </section>
 
-    <!-- SCREEN 3: KUE -->
-    <section id="s3" class="screen hidden">
-      <h1>Potong Kuenya 🎂</h1>
-      <div id="cake-area">
-        <div class="cake-piece" id="p1">
-          <div class="drip" style="left: 10px; height: 50px"></div>
-          <div class="drip" style="left: 50px; height: 70px"></div>
-          <div class="cream"></div>
-          <div class="cherry"></div>
+      <!-- SCREEN 3: KUE -->
+      <section id="s3" class="screen hidden">
+        <h1>Potong Kuenya 🎂</h1>
+        <div id="cake-area">
+          <div class="cake-piece" id="p1">
+            <div class="drip" style="left: 10px; height: 50px"></div>
+            <div class="drip" style="left: 50px; height: 70px"></div>
+            <div class="cream"></div>
+            <div class="cherry"></div>
+          </div>
+          <div class="cake-piece" id="p2">
+            <div class="drip" style="left: 20px; height: 60px"></div>
+            <div class="drip" style="left: 80px; height: 45px"></div>
+            <div class="cream"></div>
+            <div class="cherry"></div>
+          </div>
         </div>
-        <div class="cake-piece" id="p2">
-          <div class="drip" style="left: 20px; height: 60px"></div>
-          <div class="drip" style="left: 80px; height: 45px"></div>
-          <div class="cream"></div>
-          <div class="cherry"></div>
-        </div>
-      </div>
-      <p class="instruction">Usap jarimu dari atas ke bawah pada kue!</p>
-    </section>
+        <p class="instruction">
+          Usap jarimu dari atas ke bawah pada kue cokelatnya!
+        </p>
+      </section>
 
-    <!-- SCREEN 4: KADO -->
-    <section id="s4" class="screen hidden">
-      <h1>Buka Kado Kamu 🎁</h1>
-      <div id="gift-section">
-        <div class="gift-box" id="gBox">
-          <div class="ribbon-v" id="rv"></div>
-          <div class="ribbon-h" id="rh"></div>
+      <!-- SCREEN 4: KADO -->
+      <section id="s4" class="screen hidden">
+        <h1>Buka Kado Kamu 🎁</h1>
+        <div id="gift-section">
+          <div class="gift-box" id="gBox">
+            <div class="ribbon-v" id="rv"></div>
+            <div class="ribbon-h" id="rh"></div>
+          </div>
         </div>
-      </div>
-      <p class="instruction" id="giftHint">
-        Usap ke bawah, lalu usap ke samping!
-      </p>
-    </section>
+        <p class="instruction" id="giftHint">
+          Usap ke bawah, lalu usap ke samping!
+        </p>
+      </section>
 
-    <!-- SCREEN 5: GALLERY -->
-    <section id="s5" class="screen hidden" style="justify-content: flex-start">
-      <h1 style="margin-top: 50px">Special for Filza ❤️</h1>
-      <div class="gallery-wrapper">
-        <div class="photo-track" id="photoTrack"></div>
-      </div>
-      <p style="text-align: center; padding: 20px; font-size: 0.9rem">
-        Klik foto untuk ucapan manis dariku.
-      </p>
-      <button class="btn" onclick="location.reload()">Ulangi</button>
-    </section>
+      <!-- SCREEN 5: GALLERY -->
+      <section
+        id="s5"
+        class="screen hidden"
+        style="justify-content: flex-start">
+        <h1 style="margin-top: 50px">Special for Filza ❤️</h1>
+        <div class="gallery-wrapper">
+          <div class="photo-track" id="photoTrack"></div>
+        </div>
+        <p style="text-align: center; padding: 20px; font-size: 0.9rem">
+          Klik foto untuk ucapan manis dariku.
+        </p>
+        <button class="btn" onclick="location.reload()">Ulangi</button>
+      </section>
+    </div>
 
     <div id="modal" onclick="this.style.display='none'">
       <div class="modal-content">
@@ -417,12 +447,42 @@
 
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script>
+      // --- SISTEM PENGUNCI WAKTU ---
+      function checkTime() {
+        const targetDate = new Date("January 10, 2026 00:00:00").getTime();
+
+        const timer = setInterval(function () {
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+
+          if (distance < 0) {
+            clearInterval(timer);
+            document.getElementById("lock-screen").style.display = "none";
+            document.getElementById("app").style.display = "block";
+          } else {
+            const h = Math.floor(
+              (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("countdown").innerHTML =
+              h + "j " + m + "m " + s + "s lagi";
+          }
+        }, 1000);
+      }
+
+      // --- SISTEM UTAMA ---
       let currentScreen = 0;
       const screens = ["s1", "s2", "s3", "s4", "s5"];
       const widget = SC.Widget(document.getElementById("sc-player"));
 
       function startApp() {
         widget.play();
+        // Loop manual jika parameter loop iframe tidak bekerja
+        widget.bind(SC.Widget.Events.FINISH, function () {
+          widget.seekTo(0);
+          widget.play();
+        });
         next();
       }
 
@@ -434,20 +494,16 @@
           .classList.remove("hidden");
       }
 
-      // LILIN LOGIC
       let extinguishedCount = 0;
       function extinguish(id) {
         const flame = document.getElementById(id);
         if (flame.style.opacity !== "0") {
           flame.style.opacity = "0";
           extinguishedCount++;
-          if (extinguishedCount === 2) {
-            setTimeout(next, 800);
-          }
+          if (extinguishedCount === 2) setTimeout(next, 800);
         }
       }
 
-      // KUE SWIPE
       let startY = 0;
       document
         .getElementById("cake-area")
@@ -469,7 +525,6 @@
           }
         });
 
-      // KADO SWIPE
       let giftStep = 0;
       let gBoxArea = document.getElementById("gift-section");
       let gStart = { x: 0, y: 0 };
@@ -499,43 +554,43 @@
 
       const memories = [
         {
-          img: "img/kenangan1.jpeg",
+          img: "kenangan1.jpeg",
           msg: "Happy Birthday, Filza Aulia Pasha! Makasih udah selalu jadi penyemangat aku.",
         },
         {
-          img: "img/kenangan2.jpeg",
+          img: "kenangan2.jpeg",
           msg: "Gak kerasa ya udah banyak kenangan yang kita buat bareng.",
         },
         {
-          img: "img/kenangan3.jpeg",
+          img: "kenangan3.jpeg",
           msg: "Makasih udah lahir ke dunia ini. Kamu kado terindah buat aku.",
         },
         {
-          img: "img/kenangan4.jpeg",
+          img: "kenangan4.jpeg",
           msg: "Tahun ini aku harap semua impianmu tercapai satu per satu.",
         },
         {
-          img: "img/kenangan5.jpeg",
+          img: "kenangan5.jpeg",
           msg: "Tetap jadi Filza yang aku kenal ya, yang ceria dan baik hati.",
         },
         {
-          img: "img/kenangan6.jpeg",
+          img: "kenangan6.jpeg",
           msg: "Lagu Mawar Jingga ini emang paling pas buat kita.",
         },
         {
-          img: "img/kenangan7.jpg",
+          img: "kenangan7.jpg",
           msg: "Maaf kalau aku sering bikin kesel, makasih udah sabar nemenin aku.",
         },
         {
-          img: "img/kenangan8.jpg",
+          img: "kenangan8.jpg",
           msg: "Dunia jadi lebih indah sejak ada kamu. Selamat bertambah usia, Sayang.",
         },
         {
-          img: "img/kenangan9.jpg",
+          img: "kenangan9.jpg",
           msg: "Yuk, buat lebih banyak kenangan manis lagi di tahun ini!",
         },
         {
-          img: "img/kenangan10.jpeg",
+          img: "kenangan10.jpeg",
           msg: "I love you more than words can say. Selamat ulang tahun, Filza! ❤️",
         },
       ];
